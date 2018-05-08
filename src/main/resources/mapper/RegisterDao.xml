@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zc.dao.RegisterDao">
+    <insert id="save">
+        insert into student (sid , sname , sex, age , major, mail , password,tid,pid)
+        values(#{student.sid},#{student.sname},#{student.sex},#{student.age},#{student.major},#{student.mail},#{student.password},#{student.tutor.tid},#{student.paper.pid});
+    </insert>
+
+    <insert id="saveTutor">
+        INSERT INTO teacher (tid,tname,prof,mail,password)
+                VALUE (#{tutor.tid},#{tutor.tname},#{tutor.prof},#{tutor.mail},#{tutor.password})
+    </insert>
+</mapper>

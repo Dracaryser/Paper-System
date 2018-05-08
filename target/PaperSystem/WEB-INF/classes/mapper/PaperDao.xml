@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zc.dao.PaperDao">
+
+    <select id="findById" resultType="Paper" parameterType="Long">
+        SELECT
+            pid,
+            pname,
+            pcontent,
+            state
+        FROM paper
+        WHERE pid = #{pid}
+    </select>
+
+    <update id="update" parameterType="Paper">
+        UPDATE paper
+        SET pname = #{pname}, pcontent = #{pcontent},state = #{state}
+        WHERE pid = #{pid}
+    </update>
+
+    <select id="findSidById" resultType="Long" parameterType="Long">
+        SELECT sid
+        FROM student
+        WHERE pid = #{pid}
+    </select>
+
+    <insert id="createNewPaper">
+        INSERT INTO paper (pname, pcontent, state)
+        VALUES (NULL, NULL, "未提交")
+    </insert>
+
+    <select id="findLatestPaper" resultType="Paper">
+        SELECT
+        pid,
+        pname,
+        pcontent,
+        state
+        FROM paper
+        ORDER BY pid DESC LIMIT 1
+    </select>
+</mapper>
