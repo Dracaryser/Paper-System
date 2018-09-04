@@ -14,4 +14,6 @@ public interface TutorService {
     Tutor findById(Long tid);
 
     void update(Tutor tutor);
+
+    Tutor check(Long tid);
 }

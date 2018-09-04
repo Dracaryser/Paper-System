@@ -20,7 +20,7 @@
                 <td><input type="text" name="mail" value="${tutor.mail}"/></td>
             </tr>
             <tr align="center">
-                <td colspan="2"><input type="submit" value="保存"/> <a href="/index.jsp">返回</a></td>
+                <td colspan="2"><input type="submit" value="保存"/> <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回"></td>
             </tr>
         </table>
     </form>

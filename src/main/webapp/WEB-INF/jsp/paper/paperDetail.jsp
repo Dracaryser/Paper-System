@@ -2,36 +2,31 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>论文详情</title>
+    <title>上传论文</title>
 </head>
+<%
+    String errorInfo = (String)request.getAttribute("errormessage");         // 获取错误属性
+    if(errorInfo != null) {
+%>
+<script type="text/javascript" language="javascript">
+    alert("<%=errorInfo%>");                                            // 弹出错误信息
+
+    window.history.go(-1);
+</script>
+<%
+    }
+%>
 <body>
 <center>
-    <h1 style="color:black">论文详情</h1>
-    <form action="/paper/${student.paper.pid}/update" method="post">
-        <table border="0">
-            <tr>
-                <td>论文题目：</td>
-                <td><input type="text" name="pname" value="${student.paper.pname}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>论文内容：</td>
-                <td><textarea class="form-control" name="pcontent" rows="50"
-                              cols="80">${student.paper.pcontent}</textarea>
-                </td>
-            </tr>
-            <tr align="center">
-                <td colspan="2"><input type="submit" value="保存">
-                    <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回">
-                    <a href="/paper/${student.sid}/sendEmail">提交</a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h4>提醒：先保存再提交！</h4>
-                </td>
-            </tr>
-        </table>
+    <h1 style="color:black">上传论文</h1>
+    <form action="/file/${student.sid}/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" /> <br/><br/>
+        <input type="submit" value="上传" />
+        <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回">
+    </form>
+    <form action="/paper/${student.sid}/sendEmail" method="post]">
+        <h2 style="color:black">发送提醒邮件给导师</h2>
+        <input type="submit" value="发送" />
     </form>
 </center>
 </body>

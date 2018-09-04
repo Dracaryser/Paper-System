@@ -31,4 +31,12 @@ public class TutorServiceImpl implements TutorService {
     public void update(Tutor tutor) {
         tutorDao.update(tutor);
     }
+
+    public Tutor check(Long tid) {
+        Tutor tutor = tutorDao.findById(tid);
+        if(tutor != null){
+            return  tutor;
+        }
+        return null;
+    }
 }

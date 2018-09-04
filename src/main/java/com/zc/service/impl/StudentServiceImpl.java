@@ -53,4 +53,12 @@ public class StudentServiceImpl implements StudentService {
     public void update(Student student) {
         studentDao.update(student);
     }
+
+    public Student check(Long sid) {
+        Student student = studentDao.findById(sid);
+        if(student != null){
+            return student;
+        }
+        return null;
+    }
 }

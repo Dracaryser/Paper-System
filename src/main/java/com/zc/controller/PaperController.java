@@ -118,21 +118,23 @@ public class PaperController {
     }
 
     @RequestMapping(value = "/{sid}/tSendEmail")
-    public String tsendEmail(@PathVariable("sid") Long sid,Model model) throws MessagingException {
+    public String tsendEmail(@PathVariable("sid") Long sid,Model model,HttpServletRequest request) throws MessagingException {
         Student student = studentService.findById(sid);
         Long tid = studentService.findTidById(sid);
         Tutor tutor = tutorService.findById(tid);
         Long pid = studentService.findPidById(sid);
         Paper paper = paperService.findById(pid);
-        paper.setState("已审阅修改");
+        String comment = request.getParameter("comment");
+        paper.setState("已审阅");
         paperService.update(paper);
         List<Student> students = studentService.findByTid(tid);
         tutor.setStudents(students);
         student.setPaper(paper);
         student.setTutor(tutor);
         String to = student.getMail();
-        MailUtils.sendMail(to,"论文审阅提醒","您的论文已被导师审阅修改，请及时查看。");
+        MailUtils.sendMail(to,"论文修改意见","comment");
         model.addAttribute("tutor",tutor);
         return "tutor/tutorDetail";
     }
+
 }

@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" isELIgnored="false" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/tag.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -6,6 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>学生注册</title>
 </head>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/CheckStudent.js" charset="UTF-8"></script>
 <body>
 <center>
     <h1 style="color:black">学生注册</h1>
@@ -13,7 +17,8 @@
         <table border="0">
             <tr>
                 <td>学号：</td>
-                <td><input type="text" name="sid"/></td>
+                <td><input type="text" name="sid" id="sid"/>
+                <span id="checkUN"></span></td>
             </tr>
             <tr>
                 <td>姓名：</td>
@@ -22,7 +27,7 @@
             <tr>
                 <td>性别：</td>
                 <td><input type="radio" name="sex" value="男"/>男
-                    <input type="radio" name="sex" value="女">女</td>
+                    <input type="radio" name="sex" value="女"/>女</td>
             </tr>
             <tr>
                 <td>年龄：</td>

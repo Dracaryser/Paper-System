@@ -10,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -19,31 +22,32 @@ import java.util.List;
 public class TutorController {
 
     Tutor tutor = new Tutor();
+
     @RequestMapping(value = "log")
-    public String log(){
+    public String log() {
         return "/index";
     }
+
     @Autowired
     TutorService tutorService;
     @Autowired
     StudentService studentService;
 
     @RequestMapping(value = "/login")
-    private String login(HttpServletRequest request, Model model, HttpSession httpSession) {
+    private String login(HttpServletRequest request, Model model, HttpSession httpSession, HttpServletResponse response) throws IOException, ServletException {
         Long tid = Long.valueOf(request.getParameter("id"));
         String password = request.getParameter("password");
-        httpSession.setAttribute("id",tid);
-        try {
-            tutor = tutorService.findById(tid);
-            if(tutor == null)
-                return "/index";
-        }catch (Exception e){
-            e.printStackTrace();
+        httpSession.setAttribute("id", tid);
+        tutor = tutorService.findById(tid);
+        if (tutor == null) {
+            request.setAttribute("errormessage", "工号未注册！");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
         List<Student> students = studentService.findByTid(tid);
         tutor.setStudents(students);
         if (tutor.getTid() != tid || !tutor.getPassword().equals(password)) {
-            return "/index";
+            request.setAttribute("errormessage", "密码错误！");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } else {
             model.addAttribute("tutor", tutor);
         }
@@ -51,20 +55,20 @@ public class TutorController {
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpSession httpSession){
+    public String logout(HttpSession httpSession) {
         httpSession.invalidate();
         return "/index";
     }
 
     @RequestMapping("/{tid}/modify")
-    private String modify(@PathVariable("tid") Long tid,Model model){
+    private String modify(@PathVariable("tid") Long tid, Model model) {
         tutor = tutorService.findById(tid);
-        model.addAttribute("tutor",tutor);
+        model.addAttribute("tutor", tutor);
         return "tutor/tutorModify";
     }
 
     @RequestMapping("/{tid}/smodify")
-    private String smodify(@PathVariable("tid") Long tid,HttpServletRequest request,Model model){
+    private String smodify(@PathVariable("tid") Long tid, HttpServletRequest request, Model model) {
         tutor = tutorService.findById(tid);
         String password = request.getParameter("password");
         String mail = request.getParameter("mail");
@@ -73,10 +77,10 @@ public class TutorController {
         List<Student> students = studentService.findByTid(tid);
         tutor.setStudents(students);
         tutorService.update(tutor);
-        model.addAttribute("password",password);
-        model.addAttribute("mail",mail);
-        model.addAttribute("tid",tid);
-        model.addAttribute("tutor",tutor);
+        model.addAttribute("password", password);
+        model.addAttribute("mail", mail);
+        model.addAttribute("tid", tid);
+        model.addAttribute("tutor", tutor);
         return "tutor/tutorDetail";
 
     }

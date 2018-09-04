@@ -12,8 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Controller
 @RequestMapping("/student")
@@ -29,12 +33,13 @@ public class StudentController {
 
 
     @RequestMapping("/login")
-    private String login(HttpServletRequest request, Model model, HttpSession httpSession){
+    private String login(HttpServletRequest request, Model model, HttpSession httpSession,HttpServletResponse response)throws ServletException, IOException{
         Long sid = Long.valueOf(request.getParameter("id"));
         String password = request.getParameter("password");
         student = studentService.doLogin(sid,password);
         if(student == null){
-            return "/index";
+            request.setAttribute("errormessage", "学号未注册！");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
         Long tid = studentService.findTidById(sid);
         Tutor tutor = tutorService.findById(tid);
@@ -45,7 +50,8 @@ public class StudentController {
         model.addAttribute("sid",sid);
         httpSession.setAttribute("id",sid);
         if (student.getSid() != sid || !student.getPassword().equals(password)){
-            return "/index";
+            request.setAttribute("errormessage", "密码错误！");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }else {
             model.addAttribute("student",student);
         }

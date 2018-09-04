@@ -76,6 +76,13 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置默认编码 -->
+        <property name="defaultEncoding" value="utf-8"></property>
+        <!-- 上传文件最大大小5M-->
+        <property name="maxUploadSize" value="5242440"></property>
+    </bean>
+
     <bean id="redisDao" class="com.zc.dao.redis.RedisDao">
         <constructor-arg index="0" value="localhost"></constructor-arg>
         <constructor-arg index="1" value="6379"></constructor-arg>
@@ -88,5 +95,12 @@
             <mvc:mapping path="/tutor/*/*"/>
             <bean class="com.zc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
+
+       <mvc:interceptor>
+           <!-- /**表示所有URL和子URL路径 -->
+           <mvc:mapping path="/**" />
+           <!-- 配置自定义的文件上传类型限制拦截器 -->
+           <bean class="com.zc.interceptor.FileInterceptor" />
+       </mvc:interceptor>
     </mvc:interceptors>
 </beans>

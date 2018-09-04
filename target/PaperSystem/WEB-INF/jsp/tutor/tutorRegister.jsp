@@ -6,6 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>导师注册</title>
 </head>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/CheckTutor.js" charset="UTF-8"></script>
 <body>
 <center>
     <h1 style="color:black">导师注册</h1>
@@ -13,7 +15,8 @@
         <table border="0">
             <tr>
                 <td>工号：</td>
-                <td><input type="text" name="tid"/></td>
+                <td><input type="text" name="tid" id="tid"/>
+                <span id="checkTU"></span></td>
             </tr>
             <tr>
                 <td>姓名：</td>

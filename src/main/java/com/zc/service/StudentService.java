@@ -17,4 +17,6 @@ public interface StudentService {
     Student doLogin(Long sid,String password);
 
     void update(Student student);
+
+    Student check(Long sid);
 }

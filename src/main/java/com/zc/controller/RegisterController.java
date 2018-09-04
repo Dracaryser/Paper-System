@@ -12,10 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/register")
@@ -44,7 +50,37 @@ public class RegisterController {
         return "tutor/tutorRegister";
     }
 
+    @RequestMapping(value = "/check",method = { POST })
+    public void checkUser(HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException{
+        PrintWriter out = response.getWriter();
+        Long sid = Long.valueOf(request.getParameter("sid"));
+        if (sid==null) {
+            out.print(2);// 2是不能为空
+        } else {
+            Student student = studentService.check(sid);
+            if (student != null) {
+                out.print(1);// 学号已存在
+            } else {
+                out.print(3);// 学号可以用
+            }
+        }
+    }
 
+    @RequestMapping(value = "/checkTutor",method = { POST })
+    public void checkTutor(HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException{
+        PrintWriter out = response.getWriter();
+        Long tid = Long.valueOf(request.getParameter("tid"));
+        if (tid==null) {
+            out.print(2);// 2是不能为空
+        } else {
+            Tutor tutor = tutorService.check(tid);
+            if (tutor != null) {
+                out.print(1);// 工号已存在
+            } else {
+                out.print(3);// 工号可以用
+            }
+        }
+    }
     @RequestMapping(value = "/student")
     public String sregister(HttpServletRequest request, Model model) throws IOException{
 
