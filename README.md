@@ -1,5 +1,10 @@
-# Paper-System
-paper system for student and tutor
+# PapeSystem
+论文管理系统
+2018.9.10 更新
+
+
+使用shiro进行登陆验证及权限管理
+
 
 2018.9.4 更新：
 
