@@ -39,4 +39,12 @@ public class TutorServiceImpl implements TutorService {
         }
         return null;
     }
+
+    public String getPasswordById(String id) {
+        String password = tutorDao.getPasswordById(Long.valueOf(id));
+        if(password == null) {
+            return null;
+        }
+        return password;
+    }
 }

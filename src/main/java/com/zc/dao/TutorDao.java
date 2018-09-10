@@ -14,4 +14,6 @@ public interface TutorDao {
     Tutor findById(Long tid);
 
     void update(Tutor tutor);
+
+    String getPasswordById(Long tid);
 }

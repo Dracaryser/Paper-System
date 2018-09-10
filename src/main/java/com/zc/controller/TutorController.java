@@ -4,6 +4,10 @@ import com.zc.entity.Student;
 import com.zc.entity.Tutor;
 import com.zc.service.StudentService;
 import com.zc.service.TutorService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,20 +41,20 @@ public class TutorController {
     private String login(HttpServletRequest request, Model model, HttpSession httpSession, HttpServletResponse response) throws IOException, ServletException {
         Long tid = Long.valueOf(request.getParameter("id"));
         String password = request.getParameter("password");
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(String.valueOf(tid),password);
+        try{
+            subject.login(token);
+        }catch (AuthenticationException e){
+            request.setAttribute("errormessage", "工号或密码错误！");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
         httpSession.setAttribute("id", tid);
         tutor = tutorService.findById(tid);
-        if (tutor == null) {
-            request.setAttribute("errormessage", "工号未注册！");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        }
         List<Student> students = studentService.findByTid(tid);
         tutor.setStudents(students);
-        if (tutor.getTid() != tid || !tutor.getPassword().equals(password)) {
-            request.setAttribute("errormessage", "密码错误！");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } else {
-            model.addAttribute("tutor", tutor);
-        }
+        model.addAttribute("tutor", tutor);
+
         return "tutor/tutorDetail";
     }
 

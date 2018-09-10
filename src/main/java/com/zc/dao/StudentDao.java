@@ -16,4 +16,5 @@ public interface StudentDao {
 
     void update(Student student);
 
+    String findPasswordById(Long id);
 }

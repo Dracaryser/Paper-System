@@ -6,6 +6,10 @@ import com.zc.entity.Tutor;
 import com.zc.service.PaperService;
 import com.zc.service.StudentService;
 import com.zc.service.TutorService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,11 +40,16 @@ public class StudentController {
     private String login(HttpServletRequest request, Model model, HttpSession httpSession,HttpServletResponse response)throws ServletException, IOException{
         Long sid = Long.valueOf(request.getParameter("id"));
         String password = request.getParameter("password");
-        student = studentService.doLogin(sid,password);
-        if(student == null){
-            request.setAttribute("errormessage", "学号未注册！");
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(String.valueOf(sid),password);
+        try{
+            subject.login(token);
+        }catch (AuthenticationException e){
+            request.setAttribute("errormessage", "学号或密码错误！");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
+
+        student = studentService.doLogin(sid,password);
         Long tid = studentService.findTidById(sid);
         Tutor tutor = tutorService.findById(tid);
         student.setTutor(tutor);
@@ -49,12 +58,8 @@ public class StudentController {
         student.setPaper(paper);
         model.addAttribute("sid",sid);
         httpSession.setAttribute("id",sid);
-        if (student.getSid() != sid || !student.getPassword().equals(password)){
-            request.setAttribute("errormessage", "密码错误！");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        }else {
-            model.addAttribute("student",student);
-        }
+        model.addAttribute("student",student);
+
         return "student/studentDetail";
     }
 

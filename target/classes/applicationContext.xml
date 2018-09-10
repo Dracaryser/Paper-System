@@ -87,7 +87,37 @@
         <constructor-arg index="0" value="localhost"></constructor-arg>
         <constructor-arg index="1" value="6379"></constructor-arg>
     </bean>
-    
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+        <property name="loginUrl" value="/index.jsp"></property>
+        <property name="unauthorizedUrl" value="/index.jsp"></property>
+        <property name="filterChainDefinitions">
+            <value>
+                /index.jsp = anon
+                /student/login = anon
+                /tutor/login = anon
+                /* = authc
+            </value>
+        </property>
+    </bean>
+
+    <bean class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" id="securityManager">
+        <property name="authenticator" ref="authenticator"></property>
+    </bean>
+
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <property name="realms">
+            <list>
+                <ref bean="realm"/>
+                <ref bean="realm2"/>
+            </list>
+        </property>
+    </bean>
+    <bean class="com.zc.utils.StudentRealm" id="realm"></bean>
+
+    <bean class="com.zc.utils.TutorRealm" id="realm2"></bean>
+
    <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/paper/*/*"/>

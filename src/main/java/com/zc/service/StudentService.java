@@ -19,4 +19,6 @@ public interface StudentService {
     void update(Student student);
 
     Student check(Long sid);
+
+    String getPasswordById(String id);
 }

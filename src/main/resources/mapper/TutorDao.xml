@@ -22,6 +22,12 @@
         WHERE tid = #{tid}
     </select>
 
+    <select id="getPasswordById" resultType="String" parameterType="Long">
+        SELECT password
+        FROM teacher
+        WHERE tid = #{tid}
+    </select>
+
     <update id="update" parameterType="tutor">
         UPDATE teacher
         SET password=#{password},mail=#{mail}

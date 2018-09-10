@@ -61,4 +61,10 @@ public class StudentServiceImpl implements StudentService {
         }
         return null;
     }
+
+    public String getPasswordById(String id) {
+        String password = studentDao.findPasswordById(Long.valueOf(id));
+        if(password == null) return null;
+        return password;
+    }
 }

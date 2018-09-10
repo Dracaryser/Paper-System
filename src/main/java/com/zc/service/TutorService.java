@@ -16,4 +16,6 @@ public interface TutorService {
     void update(Tutor tutor);
 
     Tutor check(Long tid);
+
+    String getPasswordById(String id);
 }
